@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+  <siteMapNode url="" title=""  description="root menu">
+    <siteMapNode url="~/" title="Home"  description="" />
+
+    <siteMapNode url="~/_myWebPages/ManageArtists.aspx" title="Manage Artists"  description="allows artists to be added, eddited and removed. Also displays current Artists" />
+    <siteMapNode url="~/_myWebPages/ManageFiletypes.aspx" title="Manage Filetypes"  description="allows filetypes to be added, eddited and removed. Also displays current filetypes" />
+    <siteMapNode url="~/_myWebPages/ManageGenres.aspx" title="Manage Genres"  description="allows Genres to be added, eddited and removed. Also displays current Genres" />
+    <siteMapNode url="~/_myWebPages/ManageRatings.aspx" title="Manage Ratings"  description="allows Ratings to be added, eddited and removed. Also displays current Ratings" />
+    <siteMapNode url="~/_myWebPages/SearchDatabase.aspx" title="Search Music Database"  description="Search for songs based on several inputs to restrict results" />
+
+    <!--<siteMapNode url="~/About.aspx" title="About"  description="" />-->
+    <!--<siteMapNode url="~/Contact.aspx" title="Contact"  description="" />-->
+  </siteMapNode>
+</siteMap>

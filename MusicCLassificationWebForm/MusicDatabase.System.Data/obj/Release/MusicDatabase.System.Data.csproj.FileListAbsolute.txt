@@ -1,0 +1,5 @@
+C:\Users\water\Documents\Alexander Kinnear\Music Classification Database\MusicDatabaseWebForm\MusicDatabase.System.Data\bin\Release\MusicDatabase.System.Data.dll
+C:\Users\water\Documents\Alexander Kinnear\Music Classification Database\MusicDatabaseWebForm\MusicDatabase.System.Data\bin\Release\MusicDatabase.System.Data.pdb
+C:\Users\water\Documents\Alexander Kinnear\Music Classification Database\MusicDatabaseWebForm\MusicDatabase.System.Data\obj\Release\MusicDatabase.System.Data.csprojResolveAssemblyReference.cache
+C:\Users\water\Documents\Alexander Kinnear\Music Classification Database\MusicDatabaseWebForm\MusicDatabase.System.Data\obj\Release\MusicDatabase.System.Data.dll
+C:\Users\water\Documents\Alexander Kinnear\Music Classification Database\MusicDatabaseWebForm\MusicDatabase.System.Data\obj\Release\MusicDatabase.System.Data.pdb

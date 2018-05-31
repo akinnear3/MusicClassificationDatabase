@@ -1,0 +1,7 @@
+﻿this is for telling it how to conect with the database (I think)
+
+it is internal and 
+inherited from DbContext (might be a Entity Framework class...)
+
+
+one getter and setter for each BLL/Data class

@@ -1,0 +1,10 @@
+﻿in the BLL there are controllers; there is a controller class 
+for each diferent table in the database; they will
+be used to retreive data and set data using the database 
+from the appropriate methods / stored procedures.
+ 
+ [DataObject]
+ public class ...
+
+NOTE: dont forge the using clauses and a using clause to the
+other classes in this project.
