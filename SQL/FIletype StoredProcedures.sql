@@ -59,9 +59,11 @@ return
 go
 
 
-create procedure DeleteFiletype(@FiletypeID int = null) as
+Alter procedure DeleteFiletype(@FiletypeID int = null) as
 	if @FiletypeID = null
 		raiserror('Missing Parameter, need filetype ID to delete filetype.', 16, 1)
+	else if  EXISTS(select * From Songs where FiletypeID = @FiletypeID)
+		raiserror('Filetype is currently being used and cannot be deleted', 16, 1)
 	else
 		BEGIN
 			Delete From Filetype

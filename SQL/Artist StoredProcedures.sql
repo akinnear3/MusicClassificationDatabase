@@ -34,10 +34,14 @@ go
 create procedure AddArtist(@artistName varchar(100) = null) as
 	if @artistName = null
 		raiserror('no artiat name provided', 16, 1)
+	else if EXISTS(select * from Artists where Name = @artistName)
+		raiserror('Artist Already Exists. Please make the name unique.', 16, 1)
 	else
 		BEGIN
 			insert into Artists (Name) values (@artistName)
+			select ArtistID, name from Artists where ArtistID = @@IDENTITY
 		END
+return
 go
 
 --//gets all of the artists
@@ -47,10 +51,20 @@ create procedure fetchArtists as
 go
 
 --//updates an artist
-create procedure UpdateArtist(@artistID int = null, @artistname varchar = null) as
-	UPDATE Artists 
-	set Name = @artistname
-	where ArtistID = @artistID
+Create procedure UpdateArtist(@artistID int = null, @artistname varchar(100) = null) as
+	if @artistname = null
+		raiserror('Missing Parameter(s). ID and name required to update artist', 16, 1)
+	else if EXists(select * from Artists where Name = @artistname)
+		raiserror('Update Canceled; Artist Already exists. Please chose a Unique name', 16, 1)
+	else
+		BEGIN
+			UPDATE Artists 
+				set Name = @artistname
+				where ArtistID = @artistID
+			if @@ROWCOUNT = 0
+				raiserror('Update Failed, No rows affected. Please refresh list to ensure it still exists', 16, 1)
+		END
+return
 go
 
 --//deletes an artist

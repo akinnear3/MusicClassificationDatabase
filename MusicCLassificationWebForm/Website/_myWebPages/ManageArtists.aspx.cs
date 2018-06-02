@@ -29,18 +29,20 @@ public partial class _myWebPages_ManageArtists : System.Web.UI.Page
 
     protected void Artists_Gridview_RowCommand(object sender, GridViewCommandEventArgs e)
     {
-        if(e.CommandName == "Delete")
+        //collect the rowIndex
+        int row = (int)Convert.ChangeType(e.CommandArgument, TypeCode.Int32);
+
+        //collect the controllers
+        Label artistIDController = (Label)Artists_Gridview.Rows[row].FindControl("ArtistID");
+        Label artistNameController = (Label)Artists_Gridview.Rows[row].FindControl("Artist");
+
+
+        if (e.CommandName == "Delete")
         {
             e.Handled = true;
             try
             {
                 ArtistController ac = new ArtistController();
-
-                //collect the rowIndex
-                int row = (int) Convert.ChangeType(e.CommandArgument, TypeCode.Int32);
-
-                //collect the controllers
-                Label artistIDController = (Label)Artists_Gridview.Rows[row].FindControl("ArtistID");
 
                 //delete the artist
                 ac.DeleteArtist(int.Parse(artistIDController.Text));
@@ -52,6 +54,11 @@ public partial class _myWebPages_ManageArtists : System.Web.UI.Page
             {
                 Message.Text = GetInnerException(ex).Message;
             }
+        }
+        if(e.CommandName == "Edit")
+        {
+            e.Handled = true;
+            ChangeEditMode(true, artistNameController.Text, artistIDController.Text);
         }
     }
 
@@ -86,15 +93,88 @@ public partial class _myWebPages_ManageArtists : System.Web.UI.Page
 
     protected void AddArtistButton_Click(object sender, EventArgs e)
     {
-        try
+        #region My validation to ensure a name is presented for the artist
+        string name = ArtistName.Text.Trim();
+        if (string.IsNullOrEmpty(name))
         {
-            ArtistController ac = new ArtistController();
-            ac.AddArtist(ArtistName.Text);
-            LoadData();
+            ArtistName.Text = "!!!Invalid_!_Name!!!";
+            CompareValidator1.IsValid = false;
+            Page.Validate();
+            ArtistName.Text = "";
         }
-        catch(Exception ex)
+        #endregion
+
+        if (Page.IsValid)
         {
-            Message.Text = GetInnerException(ex).Message;
+            try
+            {
+                ArtistController ac = new ArtistController();
+                int newArtistID = ac.AddArtist(ArtistName.Text);
+                LoadData();
+                Message.Text = "Artist " + ArtistName.Text + " has sucessfuly been added with an ID of " + newArtistID;
+            }
+            catch (Exception ex)
+            {
+                Message.Text = GetInnerException(ex).Message;
+            }
         }
+       
+    }
+
+    protected void UpdateArtistButton_Click(object sender, EventArgs e)
+    {
+        #region My validation to ensure a name is presented for the artist
+        string name = ArtistName.Text.Trim();
+        if (string.IsNullOrEmpty(name))
+        {
+            ArtistName.Text = "!!!Invalid_!_Name!!!";
+            CompareValidator1.IsValid = false;
+            Page.Validate();
+            ArtistName.Text = "";
+        }
+        #endregion
+
+        if (Page.IsValid)
+        {
+            try
+            {
+                ArtistController ac = new ArtistController();
+                ac.UpdateArtist(int.Parse(UpdatingArtistID.Text) , ArtistName.Text);
+                LoadData();
+                Message.Text = "Artist of ID " + UpdatingArtistID.Text + " has sucessfuly been renamed as " + ArtistName.Text;
+
+                ChangeEditMode(false, "", "-1");
+            }
+            catch(Exception ex)
+            {
+                Message.Text = GetInnerException(ex).Message;
+            }
+            
+        }
+    }
+
+    protected void CancelUpdateButton_Click(object sender, EventArgs e)
+    {
+        ChangeEditMode(false, "", "-1");
+    }
+
+    /// <summary>
+    /// changes the buttons and label to match wheather or not an Artist is being updated
+    /// (true is for update, false is for creating new)
+    /// </summary>
+    /// <param name="isUpdatingArtist"></param>
+    protected void ChangeEditMode(bool isUpdatingArtist, string artistName, string artistID)
+    {
+        //change button to 'create new artist' layout
+        UpdateArtistButton.Visible = isUpdatingArtist;
+        AddArtistButton.Visible = !isUpdatingArtist;
+        CancelUpdateButton.Visible = isUpdatingArtist;
+
+        //change the label's text
+        ArtistNameLabel.Text = isUpdatingArtist? "update Artist name" : "new Artist name";
+
+        //change or clear info
+        ArtistName.Text = artistName;
+        UpdatingArtistID.Text = artistID;
     }
 }

@@ -10,3 +10,10 @@ C:\Users\water\Documents\Alexander Kinnear\Music Classification Database\MusicCL
 C:\Users\water\Documents\Alexander Kinnear\Music Classification Database\MusicCLassificationWebForm\MusicDatabase.System\obj\Debug\MusicDatabase.System.csprojResolveAssemblyReference.cache
 C:\Users\water\Documents\Alexander Kinnear\Music Classification Database\MusicCLassificationWebForm\MusicDatabase.System\obj\Debug\MusicDatabase.System.dll
 C:\Users\water\Documents\Alexander Kinnear\Music Classification Database\MusicCLassificationWebForm\MusicDatabase.System\obj\Debug\MusicDatabase.System.pdb
+C:\Users\water\Documents\Alexander Kinnear\Music Classification Database\MusicClassificationDatabase\MusicCLassificationWebForm\MusicDatabase.System\bin\Debug\MusicDatabase.System.dll
+C:\Users\water\Documents\Alexander Kinnear\Music Classification Database\MusicClassificationDatabase\MusicCLassificationWebForm\MusicDatabase.System\bin\Debug\MusicDatabase.System.pdb
+C:\Users\water\Documents\Alexander Kinnear\Music Classification Database\MusicClassificationDatabase\MusicCLassificationWebForm\MusicDatabase.System\bin\Debug\MusicDatabase.System.Data.dll
+C:\Users\water\Documents\Alexander Kinnear\Music Classification Database\MusicClassificationDatabase\MusicCLassificationWebForm\MusicDatabase.System\bin\Debug\MusicDatabase.System.Data.pdb
+C:\Users\water\Documents\Alexander Kinnear\Music Classification Database\MusicClassificationDatabase\MusicCLassificationWebForm\MusicDatabase.System\obj\Debug\MusicDatabase.System.csprojResolveAssemblyReference.cache
+C:\Users\water\Documents\Alexander Kinnear\Music Classification Database\MusicClassificationDatabase\MusicCLassificationWebForm\MusicDatabase.System\obj\Debug\MusicDatabase.System.dll
+C:\Users\water\Documents\Alexander Kinnear\Music Classification Database\MusicClassificationDatabase\MusicCLassificationWebForm\MusicDatabase.System\obj\Debug\MusicDatabase.System.pdb

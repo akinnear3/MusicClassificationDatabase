@@ -14,11 +14,12 @@
     <br />
 
     <asp:Label ID="Message" runat="server" Text=""></asp:Label>
-    <asp:ValidationSummary ID="ValidationSummary1" runat="server" />
+    <asp:ValidationSummary ID="ValidationSummary1" runat="server" ForeColor="Red" BackColor="Yellow"/>
     <br />
   
     <%--add valadators here--%>
-
+    <asp:CompareValidator ID="CompareValidator1" runat="server" ErrorMessage="Artist name is invalid, a name is required to add artists"
+         ControlToValidate="ArtistName" ValueToCompare="!!!Invalid_!_Name!!!" Type="String" Operator="NotEqual" Display="None"></asp:CompareValidator>
 
     <div class="row">
         <div class="col-md-12">
@@ -61,8 +62,14 @@
                                 CommandName="Delete" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>"/>
                         </ItemTemplate>
                     </asp:TemplateField>
+                    <asp:TemplateField HeaderText="">
+                        <ItemTemplate>
+                            <asp:Button ID="EditButton" runat="server" Text="Edit" 
+                                CommandName="Edit" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>"/>
+                        </ItemTemplate>
+                    </asp:TemplateField>
                 </Columns>
-
+                
                 <EmptyDataRowStyle HorizontalAlign="Center"></EmptyDataRowStyle>
                 <EmptyDataTemplate>There are no artist(s) that match the partial name</EmptyDataTemplate>
 
@@ -89,7 +96,10 @@
             <asp:Label ID="ArtistNameLabel" runat="server" Text="new Artist name"></asp:Label>
             <br />
             <asp:TextBox ID="ArtistName" runat="server"></asp:TextBox>
-            <asp:Button ID="AddArtistButton" runat="server" Text="Create" OnClick="AddArtistButton_Click" />
+            <asp:Button ID="UpdateArtistButton" runat="server" Text="Update" Visible="false" OnClick="UpdateArtistButton_Click" CausesValidation="true"/>
+            <asp:Label ID="UpdatingArtistID" runat="server" Text="" Visible="false"></asp:Label>
+            <asp:Button ID="AddArtistButton" runat="server" Text="Create" OnClick="AddArtistButton_Click"  CausesValidation="true"/>
+            <asp:Button ID="CancelUpdateButton" runat="server" Text="Cancel Update" Visible="false" OnClick="CancelUpdateButton_Click"  CausesValidation="false"/>
         </div>
     </div>
     

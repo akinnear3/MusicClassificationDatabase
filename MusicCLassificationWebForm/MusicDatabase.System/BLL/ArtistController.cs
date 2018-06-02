@@ -19,16 +19,22 @@ namespace MusicDatabase.System.BLL
     public class ArtistController
     {
         #region Create
-        public void AddArtist(string name)
+        /// <summary>
+        /// creates an artist and returns its Artist ID
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public int AddArtist(string name)
         {
             name = name.Replace(';', ' ');
             name = name.Replace('\'', ' ');//removes '
             name = name.Replace('"', ' ');//removes "
-            name = name.Replace(" ", "__s_pa_ce__");//placeholder for spaces
+            DataTable t;
             using (MusicContext context = new MusicContext())
             {
-                context.Exec("Exec AddArtist " + name);
+                t = context.Exec<DataTable>("Exec AddArtist '" + name + "'");
             }
+           return t.Rows[0].Field <int> ("ArtistID");
         }
         #endregion
 
@@ -57,6 +63,17 @@ namespace MusicDatabase.System.BLL
         #endregion
 
         #region Update
+        public void UpdateArtist(int ID, string name)
+        {
+            name = name.Replace(';', ' ');
+            name = name.Replace('\'', ' ');//removes '
+            name = name.Replace('"', ' ');//removes "
+            using (MusicContext context = new MusicContext())
+            {
+                context.Exec("Exec UpdateArtist " + ID +", '"+ name + "'");
+            }
+        }
+
         #endregion
 
         #region Delete
