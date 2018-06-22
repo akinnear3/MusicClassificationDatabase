@@ -13,8 +13,11 @@
     <br />
 
     <asp:Label ID="Message" runat="server" Text=""></asp:Label>
-    <asp:ValidationSummary ID="ValidationSummary1" runat="server" />
+    <asp:ValidationSummary ID="ValidationSummary1" runat="server" ForeColor="Red" BackColor="Yellow"/>
     <%--add valadators here--%>
+    <asp:CompareValidator ID="CompareValidator1" runat="server" ErrorMessage="Filetype is invalid, a filetype name is required."
+         ControlToValidate="FiletypeInput" ValueToCompare="!!!Invalid_!_Name!!!" Type="String" Operator="NotEqual" Display="None"></asp:CompareValidator>
+
 
     <br />
     <div class="row">
@@ -58,6 +61,12 @@
                                 CommandName="Delete" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>"/>
                         </ItemTemplate>
                     </asp:TemplateField>
+                      <asp:TemplateField HeaderText="">
+                        <ItemTemplate>
+                            <asp:Button ID="EditButton" runat="server" Text="Edit" 
+                                CommandName="Edit" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>"/>
+                        </ItemTemplate>
+                    </asp:TemplateField>
                 </Columns>
 
                 <EmptyDataRowStyle HorizontalAlign="Center"></EmptyDataRowStyle>
@@ -87,6 +96,9 @@
             <br />
             <asp:TextBox ID="FiletypeInput" runat="server"></asp:TextBox>
             <asp:Button ID="AddFiletypeButton" runat="server" Text="Create" OnClick="AddFiletypeButton_Click" />
+            <asp:Button ID="UpdateFyletypeButton" runat="server" Text="Update" Visible="false" OnClick="UpdateFyletypeButton_Click" CausesValidation="true"/>
+            <asp:Label ID="UpdatingFiletypeID" runat="server" Text="" Visible="false"></asp:Label>
+            <asp:Button ID="CancelUpdateButton" runat="server" Text="Cancel Update" Visible="false" OnClick="CancelUpdateButton_Click"  CausesValidation="false"/>
         </div>
     </div>
     

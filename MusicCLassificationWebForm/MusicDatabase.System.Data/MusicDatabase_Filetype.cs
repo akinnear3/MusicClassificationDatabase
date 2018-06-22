@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,5 +14,20 @@ namespace MusicDatabase.System.Data
     {
         public int filetypeID { get; set; }
         public string filetype { get; set; }
+
+        public MusicDatabase_Filetype()
+        {
+
+        }
+        public MusicDatabase_Filetype(int ftpID, string ftp)
+        {
+            filetype = ftp;
+            filetypeID = ftpID;
+        }
+
+        public static explicit operator MusicDatabase_Filetype(DataRow r)
+        {
+            return new MusicDatabase_Filetype(r.Field<int>("filetypeID"), r.Field<string>("filetype"));
+        }
     }
 }

@@ -25,6 +25,9 @@ public partial class _myWebPages_ManageFiletypes : System.Web.UI.Page
 
     }
 
+    /// <summary>
+    /// loads/reloads the gridview of filetypes
+    /// </summary>
     protected void LoadData()
     {
         try
@@ -37,18 +40,7 @@ public partial class _myWebPages_ManageFiletypes : System.Web.UI.Page
         }
     }
 
-    protected void SearchButton_Click(object sender, EventArgs e)
-    {
-        if (String.IsNullOrEmpty(SearchFiletype.Text.Trim()))
-        {
-            SearchFiletype.Text = "";
-        }
-
-        LoadData();
-
-    }
-
-    /// <summary>
+     /// <summary>
     /// gets the innermost exception of an exception
     /// </summary>
     /// <param name="ex"></param>
@@ -61,8 +53,82 @@ public partial class _myWebPages_ManageFiletypes : System.Web.UI.Page
         }
         return ex;
     }
+   
+    private void ChangeEditMode(bool isUpdating, string filetypeID)
+    {
+        //change buttons to 'create new artist' layout
+        UpdateFyletypeButton.Visible = isUpdating;
+        AddFiletypeButton.Visible = !isUpdating;
+        CancelUpdateButton.Visible = isUpdating;
 
-    /// <summary>
+        //change label's text
+        FiletypeInputLabel.Text = isUpdating ? "update Filetype name" : "new Filetype name";
+
+        //claer or change info
+        FiletypeInput.Text = "";
+        if (isUpdating)
+        {
+            try
+            {
+                FiletypeController fc = new FiletypeController();
+                MusicDatabase_Filetype filetype = fc.fetchFiletypeByID(int.Parse(filetypeID));
+                FiletypeInput.Text = filetype.filetype;
+            }
+            catch (Exception ex)
+            {
+                Message.Text = "Change edit mode failed. Could not edit filetype. Reason: " + GetInnerException(ex).Message;
+            }
+        }
+       
+        UpdatingFiletypeID.Text = filetypeID;
+    }
+
+    protected void filetypes_Gridview_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        int rowIndex = (int)Convert.ChangeType(e.CommandArgument, TypeCode.Int32);
+        Label filetypeIDControll = (Label) filetypes_Gridview.Rows[rowIndex].FindControl("FiletypeID");
+        #region delete command
+        if (e.CommandName == "Delete")
+        {
+            e.Handled = true;
+            try
+            {
+                FiletypeController fc = new FiletypeController();
+
+                //delete filetype
+                fc.DeleteFiletype(int.Parse(filetypeIDControll.Text));
+
+                //reload data
+                LoadData();
+            }
+            catch(Exception ex)
+            {
+                Message.Text = GetInnerException(ex).Message;
+            }
+        }
+        #endregion
+        #region edit command
+        else if(e.CommandName == "Edit")
+        {
+            e.Handled = true;
+            ChangeEditMode(true, filetypeIDControll.Text);
+        }
+        #endregion
+    }
+
+
+
+    protected void SearchButton_Click(object sender, EventArgs e)
+    {
+        //if (String.IsNullOrEmpty(SearchFiletype.Text.Trim()))
+        //{
+        //    SearchFiletype.Text = "";
+        //}
+
+        LoadData();
+
+    }
+ /// <summary>
     /// clars the search parameter and reloads the view
     /// </summary>
     /// <param name="sender"></param>
@@ -72,40 +138,69 @@ public partial class _myWebPages_ManageFiletypes : System.Web.UI.Page
         SearchFiletype.Text = "";
         LoadData();
     }
-
-    protected void filetypes_Gridview_RowCommand(object sender, GridViewCommandEventArgs e)
+ protected void AddFiletypeButton_Click(object sender, EventArgs e)
     {
-        if(e.CommandName == "Delete")
+        #region My validation to ensure a name is presented for the filetype
+        string name = FiletypeInput.Text.Trim();
+        if (string.IsNullOrEmpty(name))
         {
-            e.Handled = true;
-            try
-            {
-                FiletypeController fc = new FiletypeController();
-                int rowIndex = (int)Convert.ChangeType(e.CommandArgument, TypeCode.Int32);
-                Label filetypeIDControll = (Label) filetypes_Gridview.Rows[rowIndex].FindControl("FiletypeID");
+            //have it trigger the invalid validation
+            FiletypeInput.Text = "!!!Invalid_!_Name!!!";
+            CompareValidator1.IsValid = false;
+            Page.Validate();
 
-                fc.DeleteFiletype(int.Parse(filetypeIDControll.Text));
-
-                LoadData();
-            }
-            catch(Exception ex)
-            {
-                Message.Text = GetInnerException(ex).Message;
-            }
+            //clar the text i put in
+            FiletypeInput.Text = "";
         }
-    }
-
-    protected void AddFiletypeButton_Click(object sender, EventArgs e)
-    {
+        #endregion
         try
         {
             FiletypeController fc = new FiletypeController();
-            fc.AddFiletype(FiletypeInput.Text);
+            int newFtp = fc.AddFiletype(FiletypeInput.Text);
             LoadData();
+            Message.Text = "Filetype " + FiletypeInput.Text + " has been sucessfuly been added with an ID of " + newFtp;
         }
         catch(Exception ex)
         {
             Message.Text = GetInnerException(ex).Message;
         }
     }
+
+    protected void UpdateFyletypeButton_Click(object sender, EventArgs e)
+    {
+        #region My validation to ensure a name is presented for the filetype
+        string name = FiletypeInput.Text.Trim();
+        if (string.IsNullOrEmpty(name))
+        {
+            FiletypeInput.Text = "!!!Invalid_!_Name!!!";
+            CompareValidator1.IsValid = false;
+            Page.Validate();
+            FiletypeInput.Text = "";
+        }
+        #endregion
+
+        if (Page.IsValid)
+        {
+            try
+            {
+                FiletypeController fc = new FiletypeController();
+                fc.UpdateFiletype(int.Parse(UpdatingFiletypeID.Text), FiletypeInput.Text);
+                LoadData();
+                Message.Text = "Filetype of ID " + UpdatingFiletypeID.Text + " has sucessfuly been renamed as " + FiletypeInput.Text;
+
+                ChangeEditMode(false, "-1");
+            }
+            catch (Exception ex)
+            {
+                Message.Text = GetInnerException(ex).Message;
+            }
+
+        }
+    }
+
+    protected void CancelUpdateButton_Click(object sender, EventArgs e)
+    {
+        ChangeEditMode(false, "-1");
+    }
+  
 }

@@ -14,7 +14,8 @@
     <br />
 
     <asp:Label ID="Message" runat="server" Text=""></asp:Label>
-    <asp:ValidationSummary ID="ValidationSummary1" runat="server" ForeColor="Red" BackColor="Yellow"/>
+    <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
+        ForeColor="Red" BackColor="Yellow"/>
     <br />
   
     <%--add valadators here--%>
@@ -92,14 +93,18 @@
                 <SortedDescendingHeaderStyle BackColor="#575357"></SortedDescendingHeaderStyle>
             </asp:GridView>
         </div>
+
         <div class="col-md-9">
             <asp:Label ID="ArtistNameLabel" runat="server" Text="new Artist name"></asp:Label>
+            <asp:Label ID="UpdatingArtistID" runat="server" Text="" Visible="false"></asp:Label>
             <br />
             <asp:TextBox ID="ArtistName" runat="server"></asp:TextBox>
-            <asp:Button ID="UpdateArtistButton" runat="server" Text="Update" Visible="false" OnClick="UpdateArtistButton_Click" CausesValidation="true"/>
-            <asp:Label ID="UpdatingArtistID" runat="server" Text="" Visible="false"></asp:Label>
-            <asp:Button ID="AddArtistButton" runat="server" Text="Create" OnClick="AddArtistButton_Click"  CausesValidation="true"/>
-            <asp:Button ID="CancelUpdateButton" runat="server" Text="Cancel Update" Visible="false" OnClick="CancelUpdateButton_Click"  CausesValidation="false"/>
+            <asp:Button ID="UpdateArtistButton" runat="server" Text="Update" Visible="false" 
+                OnClick="UpdateArtistButton_Click" CausesValidation="true"/>
+            <asp:Button ID="AddArtistButton" runat="server" Text="Create" 
+                OnClick="AddArtistButton_Click"  CausesValidation="true"/>
+            <asp:Button ID="CancelUpdateButton" runat="server" Text="Cancel Update" Visible="false"
+                OnClick="CancelUpdateButton_Click"  CausesValidation="false"/>
         </div>
     </div>
     

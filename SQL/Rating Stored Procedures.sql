@@ -8,6 +8,10 @@ drop procedure fetchRatingBySongID
 drop procedure fetchRatings
 drop procedure DeleteRatingToSong
 drop procedure AddRatingToSong
+drop procedure UpdateRating
+drop procedure AddRating
+drop procedure searchRatings
+drop procedure DeleteRating
 go
 
 
@@ -101,11 +105,29 @@ create procedure DeleteRating(@RatingID int = null) as
 				where RatingID = @RatingID
 		END
 go
+
+--//updates  a genre's genre/name based on the ID
+create procedure UpdateRating(@RatingID int = null, @Ratingname varchar(50) = null) as
+	if @RatingID = null or @Ratingname = null
+		raiserror('missing parameter(s), ID and rating are needed to update a rating', 16, 1)
+	else if not Exists(select * from Ratings where RatingID = @RatingID)
+		raiserror('rating did not exist. Please refresh list', 16, 1)
+	else if EXISTS(select * from Ratings where Rating = @Ratingname)
+		raiserror('Update Failed, Rating Already Exists. Please chose a unique rating name', 16, 1)
+	else 
+		BEGIN
+			Update Ratings 
+				set Rating = @Ratingname
+				where RatingID = @RatingID
+			if @@ROWCOUNT = 0
+				raiserror('update failed. Please refresh list', 16, 1)
+		END
+	return
+go
 ------------------------------------------------------------------------------------------
 
 
 
-create procedure UpdateRating(@RatingID int = null, @Ratingname varchar = null) as
 
 go
 

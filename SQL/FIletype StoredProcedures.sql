@@ -8,6 +8,7 @@ drop procedure UpdateFiletype
 drop procedure DeleteFiletype
 drop procedure fetchFiletypeDescription
 drop procedure DeleteFiletype
+drop procedure fetchFiletypeByPartial
 go
 --//use Alter to change a procedure or table
 
@@ -18,6 +19,9 @@ Create procedure AddFiletype(@FiletypeName varchar(100) = null) as
 	else
 		BEGIN
 			insert into Filetype (filetype) values (@FiletypeName)
+			select FiletypeID, Filetype 
+				from Filetype 
+				where filetypeID = @@Identity
 		END
 return
 go
@@ -34,7 +38,7 @@ create procedure fetchFiletypeDescription (@FiletypeID int = null) as
 		raiserror('Missing Parameter, filetypeID needed to find filetype.', 16, 1)
 	else
 		BEGIN
-			select Filetype
+			select FiletypeID, Filetype
 				from Filetype
 				where filetypeID = @FiletypeID
 			if @@ROWCOUNT = 0
@@ -44,7 +48,7 @@ return
 go
 
 --//searches for a filetype containing the partial Filetype string
-create procedure fetchFiletypeByPartial(@partialFiletype varchar(100) = null) as
+create procedure fetchFiletypeByPartial(@partialFiletype varchar(50) = null) as
 	if @partialFiletype = null	
 		raiserror('missing parameter, partial filetype name required to search filetypes.', 16, 1)
 	else if @partialFiletype = '__Nothing__'
@@ -59,7 +63,7 @@ return
 go
 
 
-Alter procedure DeleteFiletype(@FiletypeID int = null) as
+Create procedure DeleteFiletype(@FiletypeID int = null) as
 	if @FiletypeID = null
 		raiserror('Missing Parameter, need filetype ID to delete filetype.', 16, 1)
 	else if  EXISTS(select * From Songs where FiletypeID = @FiletypeID)
@@ -72,4 +76,20 @@ Alter procedure DeleteFiletype(@FiletypeID int = null) as
 				raiserror('Delete Failed, Nothing was deleted.', 16, 1)
 		END
 return
+go
+
+create procedure UpdateFiletype(@FiletypeID int = null, @Filetype varchar(100) = null) as
+	if @Filetype = null or @FiletypeID = null
+		raiserror('Missing Parameter(s), need filetype id and filetype name to update filetype', 16, 1)
+	else if not Exists(select * from Filetype where filetypeID = @FiletypeID)
+		raiserror('Filetype does not exist, pleas cancel update and refresh list to reselect the filetype', 16, 1)
+	else 
+		BEGIN
+			Update Filetype
+				set filetype = @Filetype
+				where FiletypeID = @FiletypeID
+			if @@ROWCOUNT = 0
+				raiserror('Update Failed, No rows affected. Please refresh list to ensure filetype still exists', 16, 1)
+		END
+return 
 go

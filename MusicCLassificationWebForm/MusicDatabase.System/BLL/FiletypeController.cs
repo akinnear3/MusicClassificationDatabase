@@ -17,7 +17,7 @@ namespace MusicDatabase.System.BLL
     public class FiletypeController
     {
         #region Create
-        public void AddFiletype(string filetype)
+        public int AddFiletype(string filetype)
         {
             filetype = filetype.Replace(';', ' ');
             filetype = filetype.Replace('\'', ' ');
@@ -25,7 +25,8 @@ namespace MusicDatabase.System.BLL
 
             using (MusicContext context = new MusicContext())
             {
-                context.Exec("Exec AddFiletype '" + filetype + "'");
+                DataTable ft = context.Exec<DataTable>("Exec AddFiletype '" + filetype + "'");
+                return ft.Rows[0].Field<int>("FiletypeID");
             }
         }
         #endregion
@@ -59,6 +60,15 @@ namespace MusicDatabase.System.BLL
                 return context.Exec<DataTable>("Exec fetchFiletypeByPartial '" + partialFiletype + "'");
             }
         }
+
+        public MusicDatabase.System.Data.MusicDatabase_Filetype fetchFiletypeByID(int FiletypeID)
+        {
+            using(MusicContext context = new MusicContext())
+            {
+                DataTable t = context.Exec<DataTable>("Exec fetchFiletypeDescription " + FiletypeID);
+                return (Data.MusicDatabase_Filetype) t.Rows[0];
+            }
+        }
         #endregion
 
         #region Update
@@ -74,6 +84,21 @@ namespace MusicDatabase.System.BLL
             using (MusicContext context = new MusicContext())
             {
                 context.Exec("Exec DeleteFiletype " + filetypeID);
+            }
+        }
+
+        /// <summary>
+        /// updates the filetype to the new name/description.
+        /// </summary>
+        /// <param name="filetypeID">the filetypeID of the filetype to update</param>
+        /// <param name="filetype">the new description/name for the filetype</param>
+        public void UpdateFiletype(int filetypeID, string filetype)
+        {
+            //remove possibly bad string items
+            filetype.Trim('\'', ';', '/', '\\');
+            using (MusicContext context = new MusicContext())
+            {
+                context.Exec("Exec UpdateFiletype " + filetypeID + ", '" + filetype + "'");
             }
         }
         #endregion

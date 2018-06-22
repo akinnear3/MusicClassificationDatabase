@@ -14,8 +14,11 @@
     <br />
 
     <asp:Label ID="Message" runat="server" Text=""></asp:Label>
-    <asp:ValidationSummary ID="ValidationSummary1" runat="server" />
+    <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
+        ForeColor="Red" BackColor="Yellow"/>
     <%--add valadators here--%>
+     <asp:CompareValidator ID="CompareValidator1" runat="server" ErrorMessage="Artist name is invalid, a name is required to add artists"
+         ControlToValidate="RatingName" ValueToCompare="!!!Invalid_!_Name!!!" Type="String" Operator="NotEqual" Display="None"></asp:CompareValidator>
 
     <br />
 
@@ -60,6 +63,12 @@
                                 CommandName="Delete" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>"/>
                         </ItemTemplate>
                     </asp:TemplateField>
+                    <asp:TemplateField HeaderText="">
+                        <ItemTemplate>
+                            <asp:Button ID="EditButton" runat="server" Text="Edit" 
+                                CommandName="Edit" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>"/>
+                        </ItemTemplate>
+                    </asp:TemplateField>
                 </Columns>
 
                 <EmptyDataRowStyle HorizontalAlign="Center"></EmptyDataRowStyle>
@@ -84,11 +93,19 @@
                 <SortedDescendingHeaderStyle BackColor="#575357"></SortedDescendingHeaderStyle>
             </asp:GridView>
         </div>
+
         <div class="col-md-9">
             <asp:Label ID="RatingNameLabel" runat="server" Text="new Rating name"></asp:Label>
+            <asp:Label ID="UpdatingRatingID" runat="server" Text="" Visible="false"></asp:Label>
+
             <br />
             <asp:TextBox ID="RatingName" runat="server"></asp:TextBox>
-            <asp:Button ID="AddRatingButton" runat="server" Text="Create" OnClick="AddRatingButton_Click" />
+            <asp:Button ID="AddRatingButton" runat="server" Text="Create" 
+                OnClick="AddRatingButton_Click" />
+             <asp:Button ID="UpdateRatingButton" runat="server" Text="Update" Visible="false" 
+                OnClick="UpdateRatingButton_Click" CausesValidation="true"/>
+            <asp:Button ID="CancelUpdateButton" runat="server" Text="Cancel Update" Visible="false"
+                OnClick="CancelUpdateButton_Click"  CausesValidation="false"/>
         </div>
     </div>
     

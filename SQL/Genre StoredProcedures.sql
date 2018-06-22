@@ -6,7 +6,11 @@ drop procedure fetchGenreBySongID
 drop procedure RemoveGenreReferencesBySong
 drop procedure DeleteGenreToSong
 drop procedure fetchGenres
+drop procedure searchGenres
 drop procedure AddGenreToSong
+drop procedure AddGenre
+drop procedure DeleteGenre
+drop procedure UpdateGenre
 go
 
 
@@ -101,17 +105,28 @@ create procedure searchGenres(@partialGenre varchar(100) = null) as
 		END
 return 
 go
+
+--//updates  a genre's genre/name based on the ID
+create procedure UpdateGenre(@genreID int = null, @genrename varchar(50) = null) as
+	if @genreID = null or @genrename = null
+		raiserror('missing parameter(s), ID and genre are needed to update genre', 16, 1)
+	else if not Exists(select * from Genres where GenreID = @genreID)
+		raiserror('genre did not exist. Please refresh list', 16, 1)
+	else if EXISTS(select * from Genres where genre = @genrename)
+		raiserror('Update Failed, Genre Already Exists. Please chose a unique genre name', 16, 1)
+	else 
+		BEGIN
+			Update Genres 
+				set genre = @genrename
+				where GenreID = @genreID
+			if @@ROWCOUNT = 0
+				raiserror('update failed. Please refresh list', 16, 1)
+		END
+	return
+go
 --------------------------------------------------------------------------------------------
 
 go
-
-
-
-create procedure UpdateGenre(@genreID int = null, @genrename varchar = null) as
-
-go
-
-
 
 
 create procedure fetchGenreToSongs as

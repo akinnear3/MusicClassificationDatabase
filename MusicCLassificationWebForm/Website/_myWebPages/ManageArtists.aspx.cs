@@ -26,6 +26,57 @@ public partial class _myWebPages_ManageArtists : System.Web.UI.Page
 
     }
 
+    /// <summary>
+    /// loads the gridview with all of the artits
+    /// </summary>
+    protected void LoadData()
+    {
+        try
+        {
+            Artists_Gridview.DataBind();
+        }
+        catch(Exception ex)
+        {
+            Message.Text = GetInnerException(ex).Message;
+        }
+        
+    }
+
+    /// <summary>
+    /// gets the innermost exception of an exception
+    /// </summary>
+    /// <param name="ex"></param>
+    /// <returns></returns>
+    private Exception GetInnerException(Exception ex)
+    {
+        while (ex.InnerException != null)
+        {
+            ex = ex.InnerException;
+        }
+        return ex;
+    }
+
+    /// <summary>
+    /// changes the buttons and label to match wheather or not an Artist is being updated
+    /// (true is for update, false is for creating new)
+    /// </summary>
+    /// <param name="isUpdatingArtist"></param>
+    /// <param name="artistID"></param>
+    /// <param name="artistName"></param>
+    protected void ChangeEditMode(bool isUpdatingArtist, string artistName, string artistID)
+    {
+        //change button to 'create new artist' layout
+        UpdateArtistButton.Visible = isUpdatingArtist;
+        AddArtistButton.Visible = !isUpdatingArtist;
+        CancelUpdateButton.Visible = isUpdatingArtist;
+
+        //change the label's text
+        ArtistNameLabel.Text = isUpdatingArtist? "update Artist name" : "new Artist name";
+
+        //change or clear info
+        ArtistName.Text = artistName;
+        UpdatingArtistID.Text = artistID;
+    }
 
     protected void Artists_Gridview_RowCommand(object sender, GridViewCommandEventArgs e)
     {
@@ -36,7 +87,7 @@ public partial class _myWebPages_ManageArtists : System.Web.UI.Page
         Label artistIDController = (Label)Artists_Gridview.Rows[row].FindControl("ArtistID");
         Label artistNameController = (Label)Artists_Gridview.Rows[row].FindControl("Artist");
 
-
+        #region Delete command
         if (e.CommandName == "Delete")
         {
             e.Handled = true;
@@ -55,31 +106,16 @@ public partial class _myWebPages_ManageArtists : System.Web.UI.Page
                 Message.Text = GetInnerException(ex).Message;
             }
         }
-        if(e.CommandName == "Edit")
+        #endregion
+        #region Edit command
+        if (e.CommandName == "Edit")
         {
             e.Handled = true;
             ChangeEditMode(true, artistNameController.Text, artistIDController.Text);
         }
+        #endregion
     }
 
-    private Exception GetInnerException(Exception ex)
-    {
-        while (ex.InnerException != null)
-        {
-            ex = ex.InnerException;
-        }
-        return ex;
-    }
-
-    /// <summary>
-    /// loads the gridview with all of the songs
-    /// </summary>
-    protected void LoadData()
-    {
-        Artists_Gridview.DataBind();
-    }
-
-    
     protected void ClearButton_Click(object sender, EventArgs e)
     {
         SearchArtistName.Text = "";
@@ -158,23 +194,5 @@ public partial class _myWebPages_ManageArtists : System.Web.UI.Page
         ChangeEditMode(false, "", "-1");
     }
 
-    /// <summary>
-    /// changes the buttons and label to match wheather or not an Artist is being updated
-    /// (true is for update, false is for creating new)
-    /// </summary>
-    /// <param name="isUpdatingArtist"></param>
-    protected void ChangeEditMode(bool isUpdatingArtist, string artistName, string artistID)
-    {
-        //change button to 'create new artist' layout
-        UpdateArtistButton.Visible = isUpdatingArtist;
-        AddArtistButton.Visible = !isUpdatingArtist;
-        CancelUpdateButton.Visible = isUpdatingArtist;
 
-        //change the label's text
-        ArtistNameLabel.Text = isUpdatingArtist? "update Artist name" : "new Artist name";
-
-        //change or clear info
-        ArtistName.Text = artistName;
-        UpdatingArtistID.Text = artistID;
-    }
 }

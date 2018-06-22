@@ -63,6 +63,13 @@ namespace MusicDatabase.System.BLL
         #endregion
 
         #region Update
+        public void UpdateRating(int ratingID, string rating)
+        {
+            using (MusicContext context = new MusicContext())
+            {
+                context.Exec("Exec UpdateRating " + ratingID + ", '" + rating + "'");
+            }
+        }
         #endregion
 
         #region Delete
