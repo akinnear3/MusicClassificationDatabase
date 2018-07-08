@@ -69,10 +69,12 @@ go
 create procedure AddRating(@RatingName varchar(100) = null) as
 	if @RatingName = null
 			raiserror('no rating provided', 16, 1)
-		else
-			BEGIN
-				insert into Ratings(Rating) values (@RatingName)
-			END
+	else if EXISTS(select * from Ratings where Rating = @RatingName)
+		raiserror('Add failed; Rating already exists. Please chose a unique rating name', 16, 1)
+	else
+		BEGIN
+			insert into Ratings(Rating) values (@RatingName)
+		END
 	return
 go
 
@@ -123,6 +125,19 @@ create procedure UpdateRating(@RatingID int = null, @Ratingname varchar(50) = nu
 				raiserror('update failed. Please refresh list', 16, 1)
 		END
 	return
+go
+
+--//returns a rating to song if it exists
+Create procedure CheckRatingToSong(@songID int = null, @ratingID int = null) as
+	if @songID = null or @ratingID = null
+		raiserror('Missing Parameter(s). Check Rating - Song Failed.', 16, 1)
+	else
+		BEGIN 
+			select SongID, RatingID 
+				from RatingsToSongs
+				where RatingID = @ratingID and SongID = @songID
+		END
+return
 go
 ------------------------------------------------------------------------------------------
 

@@ -269,7 +269,7 @@ namespace MusicDatabase.System.BLL
 
             using (MusicContext context = new MusicContext())
             {
-                context.Exec<DataTable>("Exec deleteSong " + songID);
+                context.Exec("Exec deleteSong " + songID);
             }
         }
         #endregion

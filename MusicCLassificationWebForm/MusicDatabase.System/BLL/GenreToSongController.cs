@@ -36,6 +36,21 @@ namespace MusicDatabase.System.BLL
                 return context.Exec<DataTable>("fetchGenreBySongID " + songID);
             }
         }
+
+        /// <summary>
+        /// used to confirm that the genre to song reference exists
+        /// </summary>
+        /// <param name="songID"></param>
+        /// <param name="genreID"></param>
+        /// <returns></returns>
+        public bool CheckRefExists(int songID, int genreID)
+        {
+            using (MusicContext context = new MusicContext())
+            {
+                //if the rowcount is 0; then it doesn't exist and returns false; otherwise it does exist and returns true. 
+                return context.Exec<DataTable>("Exec CheckGenreToSong " + songID + ", " + genreID).Rows.Count != 0;
+            }
+        }
         #endregion
         #region Update
         #endregion

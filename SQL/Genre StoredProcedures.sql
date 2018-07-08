@@ -69,6 +69,8 @@ go
 create procedure AddGenre(@genreName varchar(100) = null) as
 	if @genreName = null
 		raiserror('no genre name provided', 16, 1)
+	else if Exists(select * from genres where genre = @genreName)
+		raiserror('Add failed; Genre Already exists. Please chose a unique genre name',16, 1)
 	else
 		BEGIN
 			insert into Genres(genre) values (@genreName)
@@ -123,6 +125,19 @@ create procedure UpdateGenre(@genreID int = null, @genrename varchar(50) = null)
 				raiserror('update failed. Please refresh list', 16, 1)
 		END
 	return
+go
+
+--//returns a genre to song if it exists
+Create procedure CheckGenreToSong(@songID int = null, @genreID int = null) as
+	if @songID = null or @genreID = null
+		raiserror('Missing Parameter(s). Check Genre - Song Failed.', 16, 1)
+	else
+		BEGIN 
+			select SongID, GenreID 
+				from GenresToSongs
+				where GenreID = @genreID and SongID = @songID
+		END
+return
 go
 --------------------------------------------------------------------------------------------
 

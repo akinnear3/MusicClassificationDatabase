@@ -16,6 +16,8 @@ go
 Create procedure AddFiletype(@FiletypeName varchar(100) = null) as
 	if @FiletypeName = null
 		raiserror('Missing parameter, filetype name required to create a filetype.', 16, 1)
+	else if EXists(select * from Filetype where filetype = @FiletypeName)
+		raiserror('Filetype Already Exists. Please chose a unique filetype name', 16, 1)
 	else
 		BEGIN
 			insert into Filetype (filetype) values (@FiletypeName)
@@ -78,11 +80,13 @@ Create procedure DeleteFiletype(@FiletypeID int = null) as
 return
 go
 
-create procedure UpdateFiletype(@FiletypeID int = null, @Filetype varchar(100) = null) as
+Create procedure UpdateFiletype(@FiletypeID int = null, @Filetype varchar(100) = null) as
 	if @Filetype = null or @FiletypeID = null
 		raiserror('Missing Parameter(s), need filetype id and filetype name to update filetype', 16, 1)
 	else if not Exists(select * from Filetype where filetypeID = @FiletypeID)
 		raiserror('Filetype does not exist, pleas cancel update and refresh list to reselect the filetype', 16, 1)
+	else if Exists(select * from Filetype where Filetype = @filetype)
+		raiserror('Update Failed; A filetype Already has this name. Please chone a unique filetype name', 16, 1)
 	else 
 		BEGIN
 			Update Filetype

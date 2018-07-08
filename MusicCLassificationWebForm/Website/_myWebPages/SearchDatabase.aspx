@@ -5,6 +5,7 @@
     <br />
     <br />
 
+<%--these are custom CSS styles--%>
     <style>
     html
     {
@@ -13,27 +14,20 @@
     .tabs
     {
         position:relative;
-        top:1px;
-        left:10px;
-
+        font-size:50px;
+        background-color:lightgray;
+        padding:5px;
      }
-    .tabs
-    {
-        position:relative;
-        top:1px;
-        left:10px;
-    }
     .selectedTab
     {
         background-color:white;
-        border-bottom:solid 1px white;
-
+        border-bottom:solid 5px white;
     }
     .tabContents
     {
         border:solid 1px black;
-        padding:10px;
         background-color:white;
+        padding:10px;
     }
 </style>
 
@@ -50,17 +44,17 @@
             <%--add valadators here--%>
 
     </div>
+    <br /><br />
     <div>
         <asp:Menu ID="TabMenu" Orientation="Horizontal" StaticMenuItemStyle-CssClass="tabs" Font-Size="Large" 
             StaticSelectedStyle-CssClass="selectedTab" StaticMenuItemStyle-HorizontalPadding="50px" StaticSelectedStyle-BackColor="White"
-            CssClass="tabs" runat="server" OnMenuItemClick="TabMenu_MenuItemClick">
-            <Items>
+            CssClass="tabs" DynamicSelectedStyle-CssClass="selectedTab" DynamicMenuItemStyle-CssClass="tabContents" runat="server" OnMenuItemClick="TabMenu_MenuItemClick">
+            <Items >
                 <asp:MenuItem Text="Search" Value="0" Selected="true"></asp:MenuItem>
                  <asp:MenuItem Text="Add New" Value="1" Selected="false"></asp:MenuItem>
             </Items>
         </asp:Menu>
     </div>
-    
     <div class="tabContents">
         <asp:MultiView ID="SearchDatabase_Multiview" ActiveViewIndex="0" runat="server">
             <asp:View ID="SearchView" runat="server"> 

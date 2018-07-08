@@ -131,13 +131,21 @@ Create procedure searchArtists(@partialName varchar(100) = null) as
 		END
 return 
 go
+
+
+--//returns a artist to song if it exists
+Create procedure CheckArtistToSong(@songID int = null, @artistID int = null) as
+	if @songID = null or @artistID = null
+		raiserror('Missing Parameter(s). Check Artist - Song Failed.', 16, 1)
+	else
+		BEGIN 
+			select SongID, ArtistID 
+				from ArtistsToSongs
+				where ArtistID = @artistID and SongID = @songID
+		END
+return
+go
+
 -------------------------------------------------------------------------------------------------------
-Exec searchArtists __s_pa_ce__
-select * from Artists
-go
-
-create procedure UpdateArtistToSong(@ArtistID int = null, @SongID int = null) as
-
-go
 
 

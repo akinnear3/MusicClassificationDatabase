@@ -27,6 +27,9 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
         }
     }
 
+    /// <summary>
+    /// loads all of the songs into the song view
+    /// </summary>
     private void LoadAllSearchData()
     {
         try
@@ -43,6 +46,9 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
         }
     }
 
+    /// <summary>
+    /// loads the songs that match the search parameter(s) into the song view
+    /// </summary>
     private void LoadSearchData()
     {
         try
@@ -51,11 +57,6 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
             if (string.IsNullOrEmpty(partialName))
             {
                 partialName = "__Nothing__";
-            }
-            else
-            {
-                //temp for spaces
-                partialName = partialName.Replace(" ", "_re_plac_ing_");
             }
 
             int FiletypeID = int.Parse(SearchFiletypeDDL.SelectedValue);
@@ -76,6 +77,11 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
         }
     }
 
+    /// <summary>
+    /// gets and returns the innermost exception
+    /// </summary>
+    /// <param name="ex"></param>
+    /// <returns></returns>
     Exception GetInerException(Exception ex)
     {
         while(ex.InnerException != null)
@@ -85,21 +91,17 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
         return ex;
     }
 
-
-
     protected void RemoveSong(int songID)
     {
         try
         {
             SongController s = new SongController();
             s.DeleteSong(songID);
-            Message.Text = "Sucessfull method call " + songID;
         }
         catch (Exception ex)
         {
             Message.Text = GetInerException(ex).Message;
         }
-        LoadAllSearchData();
     }
 
     protected void SearchInfo_GridView_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -107,12 +109,12 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
         //make sure the command exists and isn't page related
         if (!string.IsNullOrEmpty(e.CommandName) && e.CommandName.ToUpper() != "PAGE")
         {
+            #region gathering the row's controls
             //collect the row number / index number
             int index = Convert.ToInt32(e.CommandArgument);
 
             //this retreives the row itself...
             GridViewRow row = SearchInfo_GridView.Rows[index];
-
             //gather the information into variables so that its easly accessed
             var SongIDControl = (Label)row.FindControl("SongID");
             var SongNameControl = (Label)row.FindControl("SongName");
@@ -121,16 +123,17 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
             var GenresControl = (Label)row.FindControl("Genres");
             var RatingsControl = (Label)row.FindControl("Ratings");
             var ArtistsControl = (Label)row.FindControl("Artists");
+            #endregion
 
-
+            #region Delete Command
             if (e.CommandName == "Delete")
             {
                 e.Handled = true;
                 try
                 {
-                    Message.Text = SongIDControl.Text;
-                    Message.Text += " " + SongNameControl;
                     RemoveSong(int.Parse(SongIDControl.Text));
+                    Message.Text = "Succesfuly deleted song No " + SongIDControl.Text + " '" + SongNameControl.Text + "'";
+                    LoadAllSearchData();
                 }
                 catch (Exception ex)
                 {
@@ -139,7 +142,9 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
                 }
                 LoadAllSearchData();
             }
-            else if(e.CommandName == "Edit")
+            #endregion
+            #region EditCommand
+            else if (e.CommandName == "Edit")
             {
                 e.Handled = true;
                 //change the view to edit
@@ -147,6 +152,7 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
                 EditingSongID.Text = SongIDControl.Text;
                 LoadEditData();
             }
+            #endregion
 
         }
     }
@@ -343,6 +349,7 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
         SearchGenreDDL.SelectedIndex = 0;
         SearchRatingDDL.SelectedIndex = 0;
         SearchArtistDDL.SelectedIndex = 0;
+        LoadAllSearchData();
     }
 
     /// <summary>
@@ -383,6 +390,7 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
                 int newID = sc.CreateSong(name, filetypeID);
                 EditingSongID.Text = newID.ToString();
                 LoadEditData();
+                Message.Text = "'" + name + "' has been sucessfuly added as No " + newID;
             }
 
         }
@@ -419,7 +427,7 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
             {
                 SongController sc = new SongController();
                 sc.UpdateSong(int.Parse(EditingSongID.Text), name, filetypeID);
-                Message.Text = "Updated song to: " + EditingSongID.Text + " " + name + " filetype " + filetypeID.ToString();
+                Message.Text = "Updated song to: No" + EditingSongID.Text + " '" + name + "' of type " + EditingFiletypeDDL.SelectedItem.ToString();
                 LoadEditData();
             }
 
@@ -439,26 +447,34 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
     protected void AddGenreButton_Click(object sender, EventArgs e)
     {
         int songID = int.Parse(EditingSongID.Text);
-        if(songID != -1)
-        {
-            try
-            {
-                GenreToSongController gtos = new GenreToSongController();
-                int genreID = int.Parse(GenreToAddDDL.SelectedValue);
+        int genreID = int.Parse(GenreToAddDDL.SelectedValue);
+        GenreToSongController gtos = new GenreToSongController();
 
+        try
+        {
+            if (songID == -1)
+            {
+                Message.Text = "Song not yet created; pleas create the song before adding Genre(s)";
+            }
+            else if (genreID == 0)
+            {
+                Message.Text = "No Genre Has been selected; please select a genre to add";
+            }
+            else if (gtos.CheckRefExists(songID, genreID))
+            {
+                Message.Text = "No Genre Has been selected; please select a genre to add";
+            }
+            else
+            {
                 gtos.CreateReference(songID, genreID);
                 LoadEditData();
             }
-            catch (Exception ex)
-            {
-                Message.Text = GetInerException(ex).Message;
-            }
         }
-        else
+        catch (Exception ex)
         {
-            Message.Text = "Song not yet created; pleas create the song before adding Genre(s)";
+            Message.Text = GetInerException(ex).Message;
         }
-        
+
     }
 
     /// <summary>
@@ -470,15 +486,30 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
     protected void AddRatingButton_Click(object sender, EventArgs e)
     {
         int songID = int.Parse(EditingSongID.Text);
-        if(songID != -1)
+        RatingToSongController rtos = new RatingToSongController();
+        int ratingID = int.Parse(RatingToAddDDL.SelectedValue);
+
+        if (songID != -1)
         {
             try
             {
-                RatingToSongController rtos = new RatingToSongController();
-                int ratingID = int.Parse(RatingToAddDDL.SelectedValue);
-
-                rtos.CreateReference(songID, ratingID);
-                LoadEditData();
+                if (songID == -1)
+                {
+                    Message.Text = "Song not yet created; pleas create the song before adding Ratings(s)";
+                }
+                else if (ratingID == 0)
+                {
+                    Message.Text = "No Artist Has been selected; please select a Rating to add";
+                }
+                else if (rtos.CheckRefExists(songID, ratingID))
+                {
+                    Message.Text = "No Rating Has been selected; please select a Rating to add";
+                }
+                else
+                {
+                    rtos.CreateReference(songID, ratingID);
+                    LoadEditData();
+                }
             }
             catch (Exception ex)
             {
@@ -501,15 +532,32 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
     protected void AddArtistButton_Click(object sender, EventArgs e)
     {
         int songID = int.Parse(EditingSongID.Text);
-        if(songID != -1)
+        ArtistToSongController atos = new ArtistToSongController();
+        int artistID = int.Parse(ArtistToAddDDL.SelectedValue);
+
+        if (songID != -1)
         {
             try
             {
-                ArtistToSongController rtos = new ArtistToSongController();
-                int artistID = int.Parse(ArtistToAddDDL.SelectedValue);
+                if (songID == -1)
+                {
+                    Message.Text = "Song not yet created; pleas create the song before adding Artist(s)";
+                }
+                else if (artistID == 0)
+                {
+                    Message.Text = "No Artist Has been selected; please select a Artist to add";
+                }
+                else if (atos.CheckRefExists(songID, artistID))
+                {
+                    Message.Text = "No Artist Has been selected; please select a Artist to add";
+                }
+                else
+                {
+                    atos.CreateReference(songID, artistID);
+                    LoadEditData();
+                }
 
-                rtos.CreateReference(songID, artistID);
-                LoadEditData();
+               
             }
             catch (Exception ex)
             {

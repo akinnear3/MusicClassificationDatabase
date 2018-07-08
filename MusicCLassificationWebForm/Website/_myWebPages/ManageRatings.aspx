@@ -17,7 +17,7 @@
     <asp:ValidationSummary ID="ValidationSummary1" runat="server" 
         ForeColor="Red" BackColor="Yellow"/>
     <%--add valadators here--%>
-     <asp:CompareValidator ID="CompareValidator1" runat="server" ErrorMessage="Artist name is invalid, a name is required to add artists"
+     <asp:CompareValidator ID="CompareValidator1" runat="server" ErrorMessage="Rating name is invalid, a name is required to add rating"
          ControlToValidate="RatingName" ValueToCompare="!!!Invalid_!_Name!!!" Type="String" Operator="NotEqual" Display="None"></asp:CompareValidator>
 
     <br />

@@ -57,7 +57,7 @@ namespace MusicDatabase.System.BLL
 
             using (MusicContext context = new MusicContext())
             {
-                return context.Exec<DataTable>("Exec searchArtists " + partialName);
+                return context.Exec<DataTable>("Exec searchArtists '" + partialName + "'");
             }
         }
         #endregion
