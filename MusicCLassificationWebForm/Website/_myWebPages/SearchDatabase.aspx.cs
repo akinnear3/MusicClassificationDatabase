@@ -270,11 +270,13 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
             e.Handled = true;
             int index = Convert.ToInt32(e.CommandArgument);
             Label genreIDController = (Label)EditingGenres_GridView.Rows[index].FindControl("EditingGenreID");
+            Label genreNameController = (Label)EditingGenres_GridView.Rows[index].FindControl("EditingGenre");
             GenreToSongController gtos = new GenreToSongController();
             try
             {
                 gtos.RemoveReference(int.Parse(EditingSongID.Text), int.Parse(genreIDController.Text));
                 LoadEditData();
+                Message.Text = "The Genre '" + genreNameController.Text + "' has been sucessfuly removed";
             }
             catch(Exception ex)
             {
@@ -296,11 +298,14 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
             e.Handled = true;
             int index = Convert.ToInt32(e.CommandArgument);
             Label ratingIDController = (Label)EditingRatings_GridView.Rows[index].FindControl("EditingRatingID");
+            Label ratingNameController = (Label)EditingRatings_GridView.Rows[index].FindControl("EditingRating");
             RatingToSongController rtos = new RatingToSongController();
             try
             {
                 rtos.RemoveReference(int.Parse(EditingSongID.Text), int.Parse(ratingIDController.Text));
                 LoadEditData();
+
+                Message.Text = "The Rating '" + ratingNameController.Text + "' has been sucessfuly removed";
             }
             catch (Exception ex)
             {
@@ -321,11 +326,14 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
             e.Handled = true;
             int index = Convert.ToInt32(e.CommandArgument);
             Label artistIDController = (Label)EditingArtists_GridView.Rows[index].FindControl("EditingArtistID");
+            Label artistNameController = (Label)EditingArtists_GridView.Rows[index].FindControl("EditingArtist");
             ArtistToSongController atos = new ArtistToSongController();
             try
             {
                 atos.RemoveReference(int.Parse(EditingSongID.Text), int.Parse(artistIDController.Text));
                 LoadEditData();
+                
+                Message.Text = "The Artist '" + artistNameController.Text + "' has been sucessfuly removed";
             }
             catch (Exception ex)
             {
@@ -458,16 +466,20 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
             }
             else if (genreID == 0)
             {
-                Message.Text = "No Genre Has been selected; please select a genre to add";
+                Message.Text = "No Genre has been selected; please select a genre to add";
             }
             else if (gtos.CheckRefExists(songID, genreID))
             {
-                Message.Text = "No Genre Has been selected; please select a genre to add";
+                Message.Text = "Genre has already been added; please select a different genre to add";
             }
             else
             {
                 gtos.CreateReference(songID, genreID);
                 LoadEditData();
+                Message.Text = "The Genre '" + GenreToAddDDL.SelectedItem.ToString() + "' has been sucessfuly added";
+
+                //reset the item to 'select...'
+                GenreToAddDDL.SelectedIndex = 0;
             }
         }
         catch (Exception ex)
@@ -499,16 +511,20 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
                 }
                 else if (ratingID == 0)
                 {
-                    Message.Text = "No Artist Has been selected; please select a Rating to add";
+                    Message.Text = "No Rating has been selected; please select a Rating to add";
                 }
                 else if (rtos.CheckRefExists(songID, ratingID))
                 {
-                    Message.Text = "No Rating Has been selected; please select a Rating to add";
+                    Message.Text = "Rating has already been added; please select a different Rating to add";
                 }
                 else
                 {
                     rtos.CreateReference(songID, ratingID);
                     LoadEditData();
+                    Message.Text = "The Rating '" + RatingToAddDDL.SelectedItem.ToString() + "' has been sucessfuly added";
+
+                    //reset the value to 'select...'
+                    RatingToAddDDL.SelectedIndex = 0;
                 }
             }
             catch (Exception ex)
@@ -545,16 +561,20 @@ public partial class _myWebPages_SearchDatabase : System.Web.UI.Page
                 }
                 else if (artistID == 0)
                 {
-                    Message.Text = "No Artist Has been selected; please select a Artist to add";
+                    Message.Text = "No Artist has been selected; please select a Artist to add";
                 }
                 else if (atos.CheckRefExists(songID, artistID))
                 {
-                    Message.Text = "No Artist Has been selected; please select a Artist to add";
+                    Message.Text = "Artist has already been added; please select a different Artist to add";
                 }
                 else
                 {
                     atos.CreateReference(songID, artistID);
                     LoadEditData();
+                    Message.Text = "The Artist '" + ArtistToAddDDL.SelectedItem.ToString() + "' has been sucessfuly added";
+
+                    //reset the value to 'select...'
+                    ArtistToAddDDL.SelectedIndex = 0;
                 }
 
                

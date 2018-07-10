@@ -37,12 +37,12 @@ namespace MusicDatabase.System.BLL
             }
         }
 
-        public bool CheckRefExists(int songID, int genreID)
+        public bool CheckRefExists(int songID, int artistID)
         {
             using (MusicContext context = new MusicContext())
             {
                 //if the rowcount is 0; then it doesn't exist and returns false; otherwise it does exist and returns true. 
-                return context.Exec<DataTable>("Exec CheckGenreToSong " + songID + ", " + genreID).Rows.Count != 0;
+                return context.Exec<DataTable>("Exec CheckArtistToSong " + songID + ", " + artistID).Rows.Count != 0;
             }
         }
         #endregion

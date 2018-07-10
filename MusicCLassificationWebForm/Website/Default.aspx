@@ -45,33 +45,9 @@
         <div style="padding:20px; background-color:lavender">
             <h2>Bugs and Problems I am currently working on</h2>
             <ul>      
-                <li>
-                    Double check that all error messages have been remade for the specific type (rating's 	invalid name says "invalid Artist name")
-                </li>
-               <li>
-                    make it more clear on how to add a song (i.e. the add tab is bigger and more colorful. make a link up top to bring you to that page and tab, etc.)
-               </li>
-
-                <li>
-                    song needs to state that the song was created
-                </li>
-                <li>
-                    Songs need a frendlyer message to state that you already have that ___ associated with the song.
-                </li>
-           
-                <li>
-                    for songs; make sure that teive made a selection when adding [artist,genre,rating]
-                </li>
-           
-                <li>
-                    reset the current index on the add [artist,genre,rating] drop down list
-                </li>
-           
-                <li>
-                    rename the success message on the delete song
-                </li>
+               <li>All Clear... for now</li>
             </ul>
-       </div>
+        </div>
         <div style="padding:20px; background-color:lemonchiffon">
             <h2>Future additions to this project</h2>
             <ul>      
@@ -83,6 +59,11 @@
                 </li>
                 <li>
                     Have the dataTable that is returned converted into a custom datatype.
+                </li>
+                <li>
+                    I may change the information that is displayed in the [artist, rating, genre] drop down lists when updating a song. 
+                    The change would be to remove items that have alreadyh been added to the song, and have a message if there are no [genre, artist, rating] that can be added.
+                    (becaause all are already added or there arent any in the first place)
                 </li>
             </ul>
         </div>
